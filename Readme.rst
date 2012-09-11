@@ -16,6 +16,13 @@ They take as input text files formatted as required in the book `http://myslu.st
  * Column 3: comparison number
  * Column 4: score
 
+Library already allows to:
+
+ * Compute EPC curves
+ * Compute ROC curves
+ * Compute Biometric Menagerie
+ * Draw the score distribution
+
 The tools are:
 
  * `EPC.py` allows to compare EPC curves
