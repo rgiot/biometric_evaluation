@@ -1,4 +1,7 @@
 *.swp
 *.pyc
+*.pyo
 *.~*
-data/*.zip
+build
+bioeval/data/data.zip
+bioeval/data/snapshot1.zip
