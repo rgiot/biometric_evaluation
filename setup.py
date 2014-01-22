@@ -6,7 +6,17 @@
 """
 
 # imports
+import os, sys
 from distutils.core import setup
+
+
+
+if not os.path.exists('bioeval/data/data.zip'):
+    sys.stderr("You need to download the XMVTS databasefile and store it in bioeval/data/data.zip")
+    sys.exit(-1)
+if not os.path.exists('bioeval/data/snapshot1.zip'):
+    sys.stderr("You need to download the BANCA databasefile and store it in bioeval/data/snapshot1.zip")
+    sys.exit(-1)
 
 setup(name='Bioeval',
       version='0.1',
@@ -20,6 +30,7 @@ setup(name='Bioeval',
                 'bioeval.graph', 
                 'bioeval.tests', 
                 'bioeval.tools'],
+      package_data={'bioeval.data': ['data.zip', 'snapshot1.zip']}
      )
 
 

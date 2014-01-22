@@ -9,4 +9,5 @@ AUTHOR Romain Giot <giot.romain@gmail.com>
 class ROCConfidenceInterval(object):
     """Compute ROC confidence interval."""
 
-    def __init__(self, roc1)
+    def __init__(self, roc1):
+        pass
