@@ -12,7 +12,7 @@ from traits.api import HasTraits, String, Enum
 
 import numpy as N
 from scipy.integrate import trapz
-from scipy.interpolate import interp1d
+from scipy.interpolate import interp1d, UnivariateSpline
 import scipy.interpolate
 import matplotlib.pyplot as plt
 
@@ -367,9 +367,11 @@ class CartesianROCCurve(ROCCurve):
 
         @param fmr: False Match Rate for which we want to obtain the threshold.
         """
-        interT = interp1d(self.get_raw_FMR(), self.get_raw_thresholds(),
-                bounds_error=True,)
-        return interT(fmr)
+        #inter = interp1d(self.get_raw_FMR(), self.get_raw_thresholds(),
+        #        bounds_error=True,)
+        inter = UnivariateSpline(self.get_raw_FMR(), self.get_raw_thresholds())
+        return inter(fmr)
+
 
     def get_raw_FNMR(self):
         """Returns False Non Match Rate"""
@@ -657,10 +659,13 @@ class PolarRocCurve(ROCCurve):
         """Returns the thresold at the EER (previously computed).
         """
 
-        interR = interp1d(x=self.get_raw_theta()[::-1],
-                y=self.get_raw_thresholds()[::-1],
-                bounds_error=True,
-                kind='linear')
+#        interR = interp1d(x=self.get_raw_theta()[::-1],
+#                y=self.get_raw_thresholds()[::-1],
+#                bounds_error=True,
+#                kind='linear')
+        interR = UnivariateSpline(x=self.get_raw_theta()[::-1],
+                y=self.get_raw_thresholds()[::-1])
+
 
         return interR(3.0*N.pi/4.0)
 
