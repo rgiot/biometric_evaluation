@@ -12,10 +12,12 @@ from distutils.core import setup
 
 
 if not os.path.exists('bioeval/data/data.zip'):
-    sys.stderr("You need to download the XMVTS databasefile and store it in bioeval/data/data.zip")
+    sys.stderr("You need to download the XM2VTS databasefile and store it in bioeval/data/data.zip \n")
+    sys.stderr("http://personal.ee.surrey.ac.uk/Personal/Norman.Poh/web/fusion/main.php?bodyfile=entry_page.html")
     sys.exit(-1)
 if not os.path.exists('bioeval/data/snapshot1.zip'):
-    sys.stderr("You need to download the BANCA databasefile and store it in bioeval/data/snapshot1.zip")
+    sys.stderr("You need to download the BANCA databasefile and store it in bioeval/data/snapshot1.zip\n")
+    sys.stderr("Access form is here http://personal.ee.surrey.ac.uk/Personal/Norman.Poh/web/banca_multi/main.php?bodyfile=entry_page.html")
     sys.exit(-1)
 
 setup(name='Bioeval',
