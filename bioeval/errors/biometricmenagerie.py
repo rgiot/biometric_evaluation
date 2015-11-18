@@ -10,8 +10,8 @@ Each user is symbolised by the mean score intra or inter
 TODO use more extensively traits api
 """
 
-from enthought.traits.api import HasStrictTraits, Instance, \
-        Float, Array, String, Enum
+from traits.api import HasStrictTraits, Instance, \
+        Float, Array, String, Enum, Int
 import numpy as np
 from scipy.stats.stats import pearsonr, scoreatpercentile
 from matplotlib import pyplot as plt
@@ -70,6 +70,7 @@ class BiometricMenagerie(bi.Score):
 
     _goat_scores = Array
     _wolf_scores = Array
+    n_jobs=Int
 
 
     def __init__(self, data, scoretype='score'):
@@ -81,6 +82,7 @@ class BiometricMenagerie(bi.Score):
 
         super(BiometricMenagerie, self).__init__(data)
 
+        self.n_jobs=1
         self._type = scoretype
 
         self._compute_mean_scores()
@@ -155,13 +157,13 @@ class BiometricMenagerie(bi.Score):
         nb25percent = len(self._users_id)*25/100
 
         # Get genuine scores of each users
-        self._genuine_scores = np.asarray(Parallel(n_jobs=-1, verbose=1) \
+        self._genuine_scores = np.asarray(Parallel(n_jobs=self.n_jobs, verbose=1) \
                 (delayed(_parallel_mean_score_helper)(self.get_genuine_presentations_of_user(userid)) \
                     for userid in self._users_id))
 
 
         # Get impostors scores of each users
-        self._impostor_scores = np.asarray(Parallel(n_jobs=-1, verbose=1) \
+        self._impostor_scores = np.asarray(Parallel(n_jobs=self.n_jobs, verbose=1) \
                 (delayed(_parallel_mean_score_helper)(self.get_impostor_presentations_of_user(userid)) \
                     for userid in self._users_id))
 
@@ -362,14 +364,14 @@ class BiometricMenagerie(bi.Score):
 
         # We need to compute error rate of each user
         # Get genuine reject of each users
-        fr = np.asarray(Parallel(n_jobs=-1, verbose=1) \
+        fr = np.asarray(Parallel(n_jobs=self.n_jobs, verbose=1) \
                 (delayed(_parallel_false_reject_helper)(self.get_genuine_presentations_of_user(userid),
                     thr, self._type) \
                     for userid in self._users_id))
 
 
         # Get impostors accept of each users
-        fa = np.asarray(Parallel(n_jobs=-1, verbose=1) \
+        fa = np.asarray(Parallel(n_jobs=self.n_jobs, verbose=1) \
                 (delayed(_parallel_false_accept_helper)(self.get_impostor_presentations_of_user(userid),
                     thr, self._type) \
                     for userid in self._users_id))
@@ -439,68 +441,70 @@ class BiometricMenagerie(bi.Score):
         others = np.setdiff1d(others, doves)
         others = np.setdiff1d(others, worms)
 
-        if len(chameleons)>0:
-            plt.scatter(
-                self._genuine_scores[chameleons],
-                self._impostor_scores[chameleons],
-                label='chameleon',
-                color='green',
-                marker='^')
+        if True:
+            if len(chameleons)>0:
+                plt.scatter(
+                    self._genuine_scores[chameleons],
+                    self._impostor_scores[chameleons],
+                    label='chameleon',
+                    color='green',
+                    marker='^')
 
-        if len(phantoms)>0:
-            plt.scatter(
-                self._genuine_scores[phantoms],
-                self._impostor_scores[phantoms],
-                label='phantom',
-                color='red',
-                marker='<')
+            if len(phantoms)>0:
+                plt.scatter(
+                    self._genuine_scores[phantoms],
+                    self._impostor_scores[phantoms],
+                    label='phantom',
+                    color='red',
+                    marker='<')
 
-        if len(doves)>0:
-            plt.scatter(
-                self._genuine_scores[doves],
-                self._impostor_scores[doves],
-                label='dove',
-                color='blue',
-                marker='>')
+            if len(doves)>0:
+                plt.scatter(
+                    self._genuine_scores[doves],
+                    self._impostor_scores[doves],
+                    label='dove',
+                    color='blue',
+                    marker='>')
 
 
-        if len(worms)>0:
-            plt.scatter(
-                self._genuine_scores[worms],
-                self._impostor_scores[worms],
-                label='worm',
-                color='black',
-                marker='v')
+            if len(worms)>0:
+                plt.scatter(
+                    self._genuine_scores[worms],
+                    self._impostor_scores[worms],
+                    label='worm',
+                    color='black',
+                    marker='v')
 
-        if len(others)>0:
-            plt.scatter(
-                self._genuine_scores[others],
-                self._impostor_scores[others],
-                label='other',
-                color='gray',
-                marker='o')
+            if len(others)>0:
+                plt.scatter(
+                    self._genuine_scores[others],
+                    self._impostor_scores[others],
+                    label='other',
+                    color='gray',
+                    marker='o')
 
-#        if len(goats)>0:
-#            plt.scatter(
-#                self._genuine_scores[goats],
-#                self._impostor_scores[goats],
-#                label='goat',
-#                facecolor='none',
-#                edgecolor='black',
-#                marker='o',
-#                s= 70)
-#
-#
-#        if len(lambs)>0:
-#            print lambs
-#            plt.scatter(
-#                self._genuine_scores[lambs],
-#                self._impostor_scores[lambs],
-#                label='lamb',
-#                facecolor='none',
-#                edgecolor='black',
-#                marker='s',
-#                s= 80)
+        else:
+            if len(goats)>0:
+                plt.scatter(
+                    self._genuine_scores[goats],
+                    self._impostor_scores[goats],
+                    label='goat',
+                    facecolor='none',
+                    edgecolor='black',
+                    marker='o',
+                    s= 70)
+    
+   
+            if len(lambs)>0:
+                print lambs
+                plt.scatter(
+                   self._genuine_scores[lambs],
+                    self._impostor_scores[lambs],
+                    label='lamb',
+                    facecolor='none',
+                    edgecolor='black',
+                    marker='s',
+                    s= 80)
 
         # Bordures
         if self._type == 'score':
