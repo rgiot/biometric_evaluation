@@ -23,7 +23,12 @@ def main():
 
     print "M=%d\nthreshold=%d\nangles=%d\nalpha=%f\nfile=%s" % \
      (M, nb_thresholds, nb_angles, alpha, fname)
-    data = N.loadtxt(fname)
+
+    data = None
+    try:
+        data = N.loadtxt(fname)
+    except:
+        data = N.loadtxt(fname, delimiter=',')
     rocScore = roc.ROCScores(data)
     rocScore.get_confidence_interval(alpha=alpha, repet=M)
     pylab.show()
