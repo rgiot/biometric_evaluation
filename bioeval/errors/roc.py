@@ -191,7 +191,7 @@ class ROCScores(bi.Score):
                 FNMR = intra_reject.get_estimated_error()
                 FMR = inter_accept.get_estimated_error()
 
-                if res == None:
+                if res is None:
                     res = (threshold, FNMR, FMR)
                 else:
                     res = N.vstack( (res, (threshold, FNMR, FMR)) )
@@ -203,7 +203,7 @@ class ROCScores(bi.Score):
                 FNMR = intra_reject.get_estimated_error()
                 FMR = inter_accept.get_estimated_error()
 
-                if res == None:
+                if res is None:
                     res = (threshold, FNMR, FMR)
                 else:
                     res = N.vstack( (res, (threshold, FNMR, FMR)) )
@@ -212,7 +212,7 @@ class ROCScores(bi.Score):
         return CartesianROCCurve(res, self._type)
 
     def display_bootstraped_difference(self):
-        """Display in the actual figure, the histogram of the 
+        """Display in the actual figure, the histogram of the
         eer difference between the orignal curve and the bootstrapes ones.
         """
 
@@ -695,5 +695,5 @@ if __name__ == "__main__":
     rocscores.display_bootstraped_difference()
 
     plt.show()
-    
+
 
